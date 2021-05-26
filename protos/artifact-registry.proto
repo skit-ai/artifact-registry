@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "/;artifact_registry";
+package artifact_registry;
+
+import "google/protobuf/struct.proto";
+
+message MLArtifact {
+    enum ArtifactType {
+        MODEL = 0;
+        REPORT = 1;
+        DATASET = 2;
+        ALL = 3;
+    }
+
+    repeated int64 ids = 1;
+    optional ArtifactType artifact_type = 2;
+}
+
+message ArtifactData {
+    string name = 1;
+    string uri = 2;
+    string version = 3;
+    optional google.protobuf.Struct metadata = 4;
+}
+
+message ArtifactsResponse {
+    repeated ArtifactData artifacts = 1;
+}
+
+message Workspace {
+    string name = 1;
+}
+
