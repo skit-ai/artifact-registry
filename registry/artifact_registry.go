@@ -64,8 +64,8 @@ func ArtifactStore(uuid string) MLArtifactStore {
 }
 
 // GetArtifactsByID - Fetch artifacts by list of artifact IDs
-func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (pb.ArtifactsResponse, error) {
-	var artifactsResponse pb.ArtifactsResponse
+func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (*pb.ArtifactsResponse, error) {
+	var artifactsResponse *pb.ArtifactsResponse
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
 	defer cancel()
@@ -93,7 +93,7 @@ func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (
 
 	log.Debug("Fetch Artifacts by IDs")
 
-	artifactsResponse = pb.ArtifactsResponse{Artifacts: artifactList}
+	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 
 	return artifactsResponse, nil
 }
