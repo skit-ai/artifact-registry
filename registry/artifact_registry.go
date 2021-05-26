@@ -20,7 +20,6 @@ limitations under the License.
 package artifact_registry
 
 import (
-	pb "artifact-registry/protos"
 	"context"
 	"os"
 	"strconv"
@@ -29,6 +28,8 @@ import (
 
 	"github.com/Vernacular-ai/vcore/log"
 	"google.golang.org/grpc"
+
+	pb "artifact-registry/protos"
 )
 
 var (
