@@ -89,17 +89,7 @@ func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (
 		return artifactsResponse, err
 	}
 
-	var artifactList []*pb.ArtifactData
-	for _, element := range response.Artifacts {
-		artifactData := &pb.ArtifactData{
-			Name:    element.Properties["name"].GetStringValue(),
-			Uri:     element.GetUri(),
-			Version: element.Properties["name"].GetStringValue(),
-		}
-		artifactList = append(artifactList, artifactData)
-	}
-
-	log.Debug("Fetch Artifacts by IDs")
+    artifactList := prepareArtifactsList(response.Artifacts)
 
 	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 
