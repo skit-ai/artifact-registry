@@ -6,22 +6,23 @@ package artifact_registry;
 import "google/protobuf/struct.proto";
 
 message MLArtifact {
-    enum ArtifactType {
-        MODEL = 0;
-        REPORT = 1;
-        DATASET = 2;
-        ALL = 3;
-    }
-
     repeated int64 ids = 1;
-    optional ArtifactType artifact_type = 2;
 }
 
 message ArtifactData {
     string name = 1;
     string uri = 2;
     string version = 3;
-    optional google.protobuf.Struct metadata = 4;
+    string execution_id = 4;
+
+    enum ArtifactType {
+        MODEL = 0;
+        METRICS = 1;
+        DATASET = 2;
+        OTHER = 3;
+    }
+    ArtifactType artifact_type = 5;
+    optional google.protobuf.Struct metadata = 6;
 }
 
 message ArtifactsResponse {
