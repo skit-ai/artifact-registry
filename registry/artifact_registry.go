@@ -32,6 +32,7 @@ import (
 	pb "artifact-registry/protos"
 )
 
+// Kubeflow default context
 var CONTEXT_TYPE_NAME string = "kubeflow.org/alpha/workspace"
 
 var (
@@ -57,7 +58,6 @@ type Workspace struct {
 // ArtifactStore function instantiates the MLArtifactStore instance.
 //
 // Use this instance to call methods to fetch artifacts, lineage tracking etc.
-// Check examples/ for sample code snippets.
 func ArtifactStore(uuid string) MLArtifactStore {
 	var err error
 
@@ -72,7 +72,7 @@ func ArtifactStore(uuid string) MLArtifactStore {
 	return artifactStore
 }
 
-// GetArtifactsByID - Fetch artifacts by list of artifact IDs
+// GetArtifactsByID fetches artifacts by list of artifact IDs
 func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (*pb.ArtifactsResponse, error) {
 	var artifactsResponse *pb.ArtifactsResponse
 
@@ -97,9 +97,9 @@ func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (
 	return artifactsResponse, nil
 }
 
-// GetWorkspace - returns a workspace instance for the requested named
+// GetWorkspace returns a workspace instance for the requested named
 // workspace. This is used to call methods to fetch artifacts grouped in a
-// particular workspace
+// particular workspace.
 func (artifactStore MLArtifactStore) GetWorkspace(workspace *pb.Workspace) (Workspace, error) {
     var workspaceResponse Workspace
 
@@ -124,8 +124,8 @@ func (artifactStore MLArtifactStore) GetWorkspace(workspace *pb.Workspace) (Work
     return workspaceResponse, nil
 }
 
-// GetArtifactsByWorkspace - returns a list of artifacts associated with this
-// workspace
+// GetArtifactsByWorkspace returns a list of artifacts associated with this
+// workspace.
 func (workspace Workspace) GetArtifactsByWorkspace() (*pb.ArtifactsResponse, error) {
 	var artifactsResponse *pb.ArtifactsResponse
 
