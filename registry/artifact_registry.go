@@ -32,6 +32,8 @@ import (
 	pb "artifact-registry/protos"
 )
 
+var CONTEXT_TYPE_NAME string = "kubeflow.org/alpha/workspace"
+
 var (
 	logLevel int
 	client   pb.MetadataStoreServiceClient
@@ -43,6 +45,12 @@ type MLArtifactStore struct {
 	Uuid string
 	Host string
 	Port string
+}
+
+// Workspace type provides access to list of Go methods to fetch artifacts
+// grouped within a "workspace"
+type Workspace struct {
+    Name string
 }
 
 // ArtifactStore function instantiates the MLArtifactStore instance.
@@ -98,7 +106,34 @@ func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (
 	return artifactsResponse, nil
 }
 
-// Initialize gRPC client for MLMD storage connection
+// GetWorkspace - returns a workspace instance for the requested named
+// workspace. This is used to call methods to fetch artifacts grouped in a
+// particular workspace
+func (artifactStore MLArtifactStore) GetWorkspace(workspace *pb.Workspace) (Workspace, error) {
+    var workspaceResponse Workspace
+
+    ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+	defer cancel()
+
+    contextRequest := &pb.GetContextByTypeAndNameRequest{
+        TypeName: &CONTEXT_TYPE_NAME,
+        ContextName: &workspace.Name,
+    }
+
+    var err error
+    response, err := client.GetContextByTypeAndName(ctx, contextRequest)
+    if err != nil {
+		log.Debugf("Failed to fetch workspace: %v", err)
+		return workspaceResponse, err
+	}
+
+    contextName := response.Context.GetName()
+    workspaceResponse = Workspace{Name: contextName}
+	log.Debugf("Fetched workspace %s", contextName)
+
+    return workspaceResponse, nil
+}
+
 func clientInit() pb.MetadataStoreServiceClient {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
