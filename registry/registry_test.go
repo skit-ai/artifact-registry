@@ -42,3 +42,22 @@ func ExampleMLArtifactStore_GetWorkspace() {
     // Output:
     // workspace_1
 }
+
+// Example to fetch artifacts in a workspace
+func ExampleWorkspace_GetArtifactsByWorkspace() {
+	artifactStore := registry.ArtifactStore("run-uuid")
+
+    workspaceInfo := &pb.Workspace{
+        Name: "workspace_2",
+    }
+
+    workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
+    fmt.Println(workspace.Name)
+
+    artifactList, _ := workspace.GetArtifactsByWorkspace()
+
+    for _, artifactData := range(artifactList.GetArtifacts()) {
+        fmt.Println(artifactData.GetName())
+    }
+}
+

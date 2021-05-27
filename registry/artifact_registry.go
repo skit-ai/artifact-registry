@@ -50,6 +50,7 @@ type MLArtifactStore struct {
 // Workspace type provides access to list of Go methods to fetch artifacts
 // grouped within a "workspace"
 type Workspace struct {
+    Id int64
     Name string
 }
 
@@ -117,11 +118,34 @@ func (artifactStore MLArtifactStore) GetWorkspace(workspace *pb.Workspace) (Work
 		return workspaceResponse, err
 	}
 
-    contextName := response.Context.GetName()
-    workspaceResponse = Workspace{Name: contextName}
-	log.Debugf("Fetched workspace %s", contextName)
+    workspaceResponse = Workspace{Id: response.Context.GetId(), Name: response.Context.GetName()}
+	log.Debugf("Fetched workspace %s", response.Context.GetName())
 
     return workspaceResponse, nil
+}
+
+// GetArtifactsByWorkspace - returns a list of artifacts associated with this
+// workspace
+func (workspace Workspace) GetArtifactsByWorkspace() (*pb.ArtifactsResponse, error) {
+	var artifactsResponse *pb.ArtifactsResponse
+
+    contextRequest := &pb.GetArtifactsByContextRequest{ContextId: &workspace.Id}
+
+    ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+	defer cancel()
+
+    var err error
+    response, err := client.GetArtifactsByContext(ctx, contextRequest)
+    if err != nil {
+        log.Debugf("Failed to fetch artifacts for workspace %s, Error: %v", workspace.Name, err)
+        return artifactsResponse, err
+    }
+
+    artifactList := prepareArtifactsList(response.GetArtifacts())
+
+	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
+
+	return artifactsResponse, nil
 }
 
 func clientInit() pb.MetadataStoreServiceClient {
