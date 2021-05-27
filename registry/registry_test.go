@@ -27,3 +27,18 @@ func ExampleMLArtifactStore_GetArtifactsByID() {
 	// example.com
 	// FunctionComponent
 }
+
+// Example usage to find Workspace by workspace name
+func ExampleMLArtifactStore_GetWorkspace() {
+	artifactStore := registry.ArtifactStore("run-uuid")
+
+    workspace := &pb.Workspace{
+        Name: "workspace_1",
+    }
+
+    response, _ := artifactStore.GetWorkspace(workspace)
+
+    fmt.Println(response.Name)
+    // Output:
+    // workspace_1
+}
