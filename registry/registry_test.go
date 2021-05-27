@@ -13,7 +13,7 @@ func ExampleMLArtifactStore_GetArtifactsByID() {
 
 	artifact := &pb.MLArtifact{
 		// ArtifactType: pb.MLArtifact_MODEL,
-		Ids: []int64{9474},
+		Ids: []int64{5312},
 	}
 	response, _ := artifactStore.GetArtifactsByID(artifact)
 
@@ -21,43 +21,46 @@ func ExampleMLArtifactStore_GetArtifactsByID() {
 		fmt.Println(artifactData.GetName())
 		fmt.Println(artifactData.GetUri())
 		fmt.Println(artifactData.GetVersion())
+		fmt.Println(artifactData.GetExecutionId())
+		fmt.Println(artifactData.ArtifactType.Enum())
 	}
 	// Output:
-	// FunctionComponent
-	// example.com
-	// FunctionComponent
+	// MNIST
+	// gcs://my-bucket/mnist
+	// model_version_69389a49-b841-41a3-b1b2-15b3cb8c629e
+	// run-2021-03-30T16:50:45.608098
+	// MODEL
 }
 
 // Example usage to find Workspace by workspace name
 func ExampleMLArtifactStore_GetWorkspace() {
 	artifactStore := registry.ArtifactStore("run-uuid")
 
-    workspace := &pb.Workspace{
-        Name: "workspace_1",
-    }
+	workspace := &pb.Workspace{
+		Name: "workspace_1",
+	}
 
-    response, _ := artifactStore.GetWorkspace(workspace)
+	response, _ := artifactStore.GetWorkspace(workspace)
 
-    fmt.Println(response.Name)
-    // Output:
-    // workspace_1
+	fmt.Println(response.Name)
+	// Output:
+	// workspace_1
 }
 
 // Example to fetch artifacts in a workspace
 func ExampleWorkspace_GetArtifactsByWorkspace() {
 	artifactStore := registry.ArtifactStore("run-uuid")
 
-    workspaceInfo := &pb.Workspace{
-        Name: "workspace_1",
-    }
+	workspaceInfo := &pb.Workspace{
+		Name: "workspace_1",
+	}
 
-    workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
-    fmt.Println(workspace.Name)
+	workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
+	artifactList, _ := workspace.GetArtifactsByWorkspace()
 
-    artifactList, _ := workspace.GetArtifactsByWorkspace()
-
-    for _, artifactData := range(artifactList.GetArtifacts()) {
-        fmt.Println(artifactData.GetName())
-    }
+	for range artifactList.GetArtifacts() {
+        // do something
+	}
+	// Output:
+	//
 }
-
