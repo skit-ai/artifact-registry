@@ -48,7 +48,7 @@ func ExampleWorkspace_GetArtifactsByWorkspace() {
 	artifactStore := registry.ArtifactStore("run-uuid")
 
     workspaceInfo := &pb.Workspace{
-        Name: "workspace_2",
+        Name: "workspace_1",
     }
 
     workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
