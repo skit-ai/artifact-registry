@@ -51,8 +51,8 @@ type MLArtifactStore struct {
 // Workspace type provides access to list of Go methods to fetch artifacts
 // grouped within a "workspace"
 type Workspace struct {
-    Id int64
-    Name string
+	Id   int64
+	Name string
 }
 
 // ArtifactStore function instantiates the MLArtifactStore instance.
@@ -66,7 +66,6 @@ func ArtifactStore(uuid string) MLArtifactStore {
 	}
 
 	artifactStore := MLArtifactStore{Uuid: uuid}
-
 	client = clientInit()
 
 	return artifactStore
@@ -90,7 +89,7 @@ func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (
 		return artifactsResponse, err
 	}
 
-    artifactList := prepareArtifactsList(response.Artifacts)
+	artifactList := prepareArtifactsList(response.Artifacts)
 
 	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 
@@ -101,27 +100,27 @@ func (artifactStore MLArtifactStore) GetArtifactsByID(artifact *pb.MLArtifact) (
 // workspace. This is used to call methods to fetch artifacts grouped in a
 // particular workspace.
 func (artifactStore MLArtifactStore) GetWorkspace(workspace *pb.Workspace) (Workspace, error) {
-    var workspaceResponse Workspace
+	var workspaceResponse Workspace
 
-    ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
 	defer cancel()
 
-    contextRequest := &pb.GetContextByTypeAndNameRequest{
-        TypeName: &CONTEXT_TYPE_NAME,
-        ContextName: &workspace.Name,
-    }
+	contextRequest := &pb.GetContextByTypeAndNameRequest{
+		TypeName:    &CONTEXT_TYPE_NAME,
+		ContextName: &workspace.Name,
+	}
 
-    var err error
-    response, err := client.GetContextByTypeAndName(ctx, contextRequest)
-    if err != nil {
+	var err error
+	response, err := client.GetContextByTypeAndName(ctx, contextRequest)
+	if err != nil {
 		log.Debugf("Failed to fetch workspace: %v", err)
 		return workspaceResponse, err
 	}
 
-    workspaceResponse = Workspace{Id: response.Context.GetId(), Name: response.Context.GetName()}
+	workspaceResponse = Workspace{Id: response.Context.GetId(), Name: response.Context.GetName()}
 	log.Debugf("Fetched workspace %s", response.Context.GetName())
 
-    return workspaceResponse, nil
+	return workspaceResponse, nil
 }
 
 // GetArtifactsByWorkspace returns a list of artifacts associated with this
@@ -129,19 +128,19 @@ func (artifactStore MLArtifactStore) GetWorkspace(workspace *pb.Workspace) (Work
 func (workspace Workspace) GetArtifactsByWorkspace() (*pb.ArtifactsResponse, error) {
 	var artifactsResponse *pb.ArtifactsResponse
 
-    contextRequest := &pb.GetArtifactsByContextRequest{ContextId: &workspace.Id}
+	contextRequest := &pb.GetArtifactsByContextRequest{ContextId: &workspace.Id}
 
-    ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
 	defer cancel()
 
-    var err error
-    response, err := client.GetArtifactsByContext(ctx, contextRequest)
-    if err != nil {
-        log.Debugf("Failed to fetch artifacts for workspace %s, Error: %v", workspace.Name, err)
-        return artifactsResponse, err
-    }
+	var err error
+	response, err := client.GetArtifactsByContext(ctx, contextRequest)
+	if err != nil {
+		log.Debugf("Failed to fetch artifacts for workspace %s, Error: %v", workspace.Name, err)
+		return artifactsResponse, err
+	}
 
-    artifactList := prepareArtifactsList(response.GetArtifacts())
+	artifactList := prepareArtifactsList(response.GetArtifacts())
 
 	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 
