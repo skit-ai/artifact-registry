@@ -49,7 +49,7 @@ kubectl port-forward -n kubeflow $(kubectl get pods -nkubeflow | grep metadata-g
 
 - `protos/` has protobufs and generated code for MLMD data store, MLMD gRPC
   service and the artifact registry SDK's data definition.
-- `registry/` has all the code to manage artifacts.
+- `registry/artifact_registry.go` has all the code to manage artifacts.
 
 
 [kubeflow]: https://www.kubeflow.org/docs/about/kubeflow/
