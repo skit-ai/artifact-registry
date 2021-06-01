@@ -64,3 +64,28 @@ func ExampleWorkspace_GetArtifactsByWorkspace() {
 	// Output:
 	//
 }
+
+// Example to fetch artifacts by type in a workspace
+func ExampleWorkspace_GetArtifactsByTypeWorkspace() {
+	artifactStore := registry.ArtifactStore("run-uuid")
+
+	workspaceInfo := &pb.Workspace{
+		Name: "workspace_1",
+	}
+
+	workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
+
+    artifactTypeRequest := &pb.ArtifactByTypeRequest{
+		ArtifactType: pb.ArtifactByTypeRequest_MODEL,
+    }
+	artifactList, _ := workspace.GetArtifactsByTypeWorkspace(artifactTypeRequest)
+
+	for _, artifactData := range artifactList.GetArtifacts() {
+		fmt.Println(artifactData.GetName())
+	}
+	// Output:
+	// MNIST
+	// MNIST
+	// MNIST
+    // FunctionComponent
+}

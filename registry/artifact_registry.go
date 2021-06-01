@@ -35,6 +35,15 @@ import (
 // Kubeflow default context
 var CONTEXT_TYPE_NAME string = "kubeflow.org/alpha/workspace"
 
+// Kubeflow type name for model type artifacts
+var MODEL_ARTIFACT_TYPE_NAME = "kubeflow.org/alpha/model"
+
+// Kubeflow type name for dataset type artifacts
+var DATASET_ARTIFACT_TYPE_NAME = "kubeflow.org/alpha/data_set"
+
+// Kubeflow type name for metrics type artifacts
+var METRICS_ARTIFACT_TYPE_NAME = "kubeflow.org/alpha/metrics"
+
 var (
 	logLevel int
 	client   pb.MetadataStoreServiceClient
@@ -141,6 +150,44 @@ func (workspace Workspace) GetArtifactsByWorkspace() (*pb.ArtifactsResponse, err
 	}
 
 	artifactList := prepareArtifactsList(response.GetArtifacts())
+
+	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
+
+	return artifactsResponse, nil
+}
+
+// GetArtifactsByTypeWorkspace returns a list of artifacts of a certain type
+// associated with this workspace
+func (workspace Workspace) GetArtifactsByTypeWorkspace(artifactTypeRequest *pb.ArtifactByTypeRequest) (*pb.ArtifactsResponse, error) {
+	var artifactsResponse *pb.ArtifactsResponse
+	var artifactType string
+
+    switch artifactTypeRequest.ArtifactType {
+    case pb.ArtifactByTypeRequest_DATASET:
+		artifactType = DATASET_ARTIFACT_TYPE_NAME
+    case pb.ArtifactByTypeRequest_MODEL:
+		artifactType = MODEL_ARTIFACT_TYPE_NAME
+    case pb.ArtifactByTypeRequest_METRICS:
+		artifactType = METRICS_ARTIFACT_TYPE_NAME
+    default:
+        var err error
+		log.Debugf("Artifact type %s does not exist", artifactTypeRequest.ArtifactType.Enum())
+		return artifactsResponse, err
+    }
+
+	artifactsByTypeRequest := &pb.GetArtifactsByTypeRequest{TypeName: &artifactType}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+	defer cancel()
+
+	response, err := client.GetArtifactsByType(ctx, artifactsByTypeRequest)
+	if err != nil {
+		log.Debugf("Failed to fetch artifacts for workspace %s, Error: %v", workspace.Name, err)
+		return artifactsResponse, err
+	}
+	log.Debug(response)
+
+	artifactList := prepareFilteredArtifactsList(response.GetArtifacts(), workspace.Name)
 
 	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 

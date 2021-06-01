@@ -22,6 +22,24 @@ import (
 	pb "artifact-registry/protos"
 )
 
+func prepareFilteredArtifactsList(artifacts[]*pb.Artifact, workspaceName string) []*pb.ArtifactData {
+    var artifactList []*pb.ArtifactData
+	for _, item := range artifacts {
+        if item.CustomProperties["__kf_workspace__"].GetStringValue() != workspaceName {
+            continue
+        }
+		artifactData := &pb.ArtifactData{
+			Name:         item.Properties["name"].GetStringValue(),
+			Uri:          item.GetUri(),
+			Version:      item.Properties["version"].GetStringValue(),
+			ExecutionId:  item.CustomProperties["__kf_run__"].GetStringValue(),
+			ArtifactType: pb.ArtifactData_MODEL,
+		}
+		artifactList = append(artifactList, artifactData)
+	}
+	return artifactList
+}
+
 func prepareArtifactsList(artifacts []*pb.Artifact) []*pb.ArtifactData {
 	artifactTypeMap := make(map[int]pb.ArtifactData_ArtifactType)
 
