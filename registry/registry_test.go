@@ -59,7 +59,7 @@ func ExampleWorkspace_GetArtifactsByWorkspace() {
 	artifactList, _ := workspace.GetArtifactsByWorkspace()
 
 	for range artifactList.GetArtifacts() {
-        // do something
+		// do something
 	}
 	// Output:
 	//
