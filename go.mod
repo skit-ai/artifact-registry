@@ -1,4 +1,4 @@
-module artifact-registry
+module github.com/Vernacular-ai/artifact-registry
 
 go 1.15
 
