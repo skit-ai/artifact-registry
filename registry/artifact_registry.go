@@ -20,6 +20,7 @@ limitations under the License.
 package artifact_registry
 
 import (
+    "fmt"
 	"context"
 	"os"
 	"strconv"
@@ -52,7 +53,6 @@ var (
 // MLArtifactStore type provides access to list of Go methods to fetch
 // artifacts in different ways.
 type MLArtifactStore struct {
-	Uuid string
 	Host string
 	Port string
 }
@@ -67,15 +67,15 @@ type Workspace struct {
 // ArtifactStore function instantiates the MLArtifactStore instance.
 //
 // Use this instance to call methods to fetch artifacts, lineage tracking etc.
-func ArtifactStore(uuid string) MLArtifactStore {
+func ArtifactStore(host string, port string) MLArtifactStore {
 	var err error
 
 	if logLevel, err = strconv.Atoi(strings.TrimSpace(os.Getenv("LOG_LEVEL"))); err == nil {
 		log.SetLevel(logLevel)
 	}
 
-	artifactStore := MLArtifactStore{Uuid: uuid}
-	client = clientInit()
+    artifactStore := MLArtifactStore{Host: host, Port: port}
+	client = clientInit(artifactStore)
 
 	return artifactStore
 }
@@ -194,10 +194,11 @@ func (workspace Workspace) GetArtifactsByTypeWorkspace(artifactTypeRequest *pb.A
 	return artifactsResponse, nil
 }
 
-func clientInit() pb.MetadataStoreServiceClient {
+func clientInit(artifactStore MLArtifactStore) pb.MetadataStoreServiceClient {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
-	conn, err := grpc.Dial("127.0.0.1:8080", opts...)
+    address := fmt.Sprintf("%s:%s", artifactStore.Host, artifactStore.Port)
+	conn, err := grpc.Dial(address, opts...)
 	if err != nil {
 		log.Debugf("Failed to establish client connection: %v", err)
 	}

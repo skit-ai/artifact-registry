@@ -9,7 +9,7 @@ import (
 
 // Usage guide to get artifacts by IDs
 func ExampleMLArtifactStore_GetArtifactsByID() {
-	artifactStore := registry.ArtifactStore("run-uuid")
+	artifactStore := registry.ArtifactStore("localhost", "8080")
 
 	artifact := &pb.MLArtifact{
 		// ArtifactType: pb.MLArtifact_MODEL,
@@ -34,7 +34,7 @@ func ExampleMLArtifactStore_GetArtifactsByID() {
 
 // Example usage to find Workspace by workspace name
 func ExampleMLArtifactStore_GetWorkspace() {
-	artifactStore := registry.ArtifactStore("run-uuid")
+	artifactStore := registry.ArtifactStore("localhost", "8080")
 
 	workspace := &pb.Workspace{
 		Name: "workspace_1",
@@ -49,7 +49,7 @@ func ExampleMLArtifactStore_GetWorkspace() {
 
 // Example to fetch artifacts in a workspace
 func ExampleWorkspace_GetArtifactsByWorkspace() {
-	artifactStore := registry.ArtifactStore("run-uuid")
+	artifactStore := registry.ArtifactStore("localhost", "8080")
 
 	workspaceInfo := &pb.Workspace{
 		Name: "workspace_1",
@@ -67,7 +67,7 @@ func ExampleWorkspace_GetArtifactsByWorkspace() {
 
 // Example to fetch artifacts by type in a workspace
 func ExampleWorkspace_GetArtifactsByTypeWorkspace() {
-	artifactStore := registry.ArtifactStore("run-uuid")
+	artifactStore := registry.ArtifactStore("localhost", "8080")
 
 	workspaceInfo := &pb.Workspace{
 		Name: "workspace_1",
