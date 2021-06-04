@@ -30,7 +30,7 @@ import (
 	"github.com/Vernacular-ai/vcore/log"
 	"google.golang.org/grpc"
 
-	pb "artifact-registry/protos"
+	pb "github.com/Vernacular-ai/artifact-registry/protos"
 )
 
 // Kubeflow default context

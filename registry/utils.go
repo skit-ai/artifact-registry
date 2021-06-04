@@ -19,7 +19,7 @@ import (
 	"context"
 	"time"
 
-	pb "artifact-registry/protos"
+	pb "github.com/Vernacular-ai/artifact-registry/protos"
 )
 
 func prepareFilteredArtifactsList(artifacts[]*pb.Artifact, workspaceName string) []*pb.ArtifactData {

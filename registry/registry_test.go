@@ -2,8 +2,8 @@
 package artifact_registry_test
 
 import (
-	pb "artifact-registry/protos"
-	registry "artifact-registry/registry"
+	pb "github.com/Vernacular-ai/artifact-registry/protos"
+	registry "github.com/Vernacular-ai/artifact-registry/registry"
 	"fmt"
 )
 
