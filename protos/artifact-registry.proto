@@ -25,6 +25,15 @@ message ArtifactData {
     optional google.protobuf.Struct metadata = 6;
 }
 
+message ArtifactByTypeRequest {
+    enum ArtifactType {
+        MODEL = 0;
+        METRICS = 1;
+        DATASET = 2;
+    }
+    ArtifactType artifact_type = 1;
+}
+
 message ArtifactsResponse {
     repeated ArtifactData artifacts = 1;
 }
