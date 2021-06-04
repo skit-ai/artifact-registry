@@ -2,6 +2,14 @@
 
 Go SDK to manage artifacts stored by [Kubeflow][kubeflow] via [MLMD][mlmd].
 
+## Usage
+
+```
+go get github.com/Vernacular-ai/artifact-registry
+```
+
+Check documentation for sample code.
+
 ## Documentation
 
 ```
