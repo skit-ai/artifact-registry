@@ -16,7 +16,7 @@ limitations under the License.
 //
 // See Also
 //
-// <repository-readme-here>
+// https://github.com/Vernacular-ai/artifact-registry
 package artifact_registry
 
 import (
