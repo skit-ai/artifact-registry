@@ -12,11 +12,7 @@ Check documentation for sample code.
 
 ## Documentation
 
-```
-godoc -http:6060
-```
-
-Go to `http://localhost:6060/pkg/artifact-registry/registry/` to checkout the doc.
+https://pkg.go.dev/github.com/Vernacular-ai/artifact-registry/registry
 
 ## Development
 
