@@ -13,7 +13,8 @@ message ArtifactData {
     string name = 1;
     string uri = 2;
     string version = 3;
-    string execution_id = 4;
+    string run_id = 4;
+    int64 id = 5;
 
     enum ArtifactType {
         MODEL = 0;
@@ -21,8 +22,8 @@ message ArtifactData {
         DATASET = 2;
         OTHER = 3;
     }
-    ArtifactType artifact_type = 5;
-    optional google.protobuf.Struct metadata = 6;
+    ArtifactType artifact_type = 6;
+    optional google.protobuf.Struct metadata = 7;
 }
 
 message ArtifactByTypeRequest {
@@ -32,6 +33,10 @@ message ArtifactByTypeRequest {
         DATASET = 2;
     }
     ArtifactType artifact_type = 1;
+}
+
+message ArtifactsByRunRequest {
+    string run_id = 1;
 }
 
 message ArtifactsResponse {

@@ -21,7 +21,7 @@ func ExampleMLArtifactStore_GetArtifactsByID() {
 		fmt.Println(artifactData.GetName())
 		fmt.Println(artifactData.GetUri())
 		fmt.Println(artifactData.GetVersion())
-		fmt.Println(artifactData.GetExecutionId())
+		fmt.Println(artifactData.GetRunId())
 		fmt.Println(artifactData.ArtifactType.Enum())
 	}
 	// Output:
@@ -87,5 +87,28 @@ func ExampleWorkspace_GetArtifactsByTypeWorkspace() {
 	// MNIST
 	// MNIST
 	// MNIST
+    // FunctionComponent
+}
+
+// Example to get lineage by run
+func ExampleWorkspace_GetLineageByRun() {
+    artifactStore := registry.ArtifactStore("localhost", "8080")
+
+	workspaceInfo := &pb.Workspace{
+		Name: "workspace_1",
+	}
+
+	workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
+
+    artifactsByRunRequest := &pb.ArtifactsByRunRequest{
+        RunId: "1c3ef58a-0b72-4fe8-8a92-9bf1e77ef7c3",
+    }
+
+    artifactList, _ := workspace.GetLineageByRun(artifactsByRunRequest)
+
+    for _, artifactData := range artifactList.GetArtifacts() {
+		fmt.Println(artifactData.GetName())
+	}
+    // Output:
     // FunctionComponent
 }

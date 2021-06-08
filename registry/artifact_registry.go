@@ -45,6 +45,9 @@ var DATASET_ARTIFACT_TYPE_NAME = "kubeflow.org/alpha/data_set"
 // Kubeflow type name for metrics type artifacts
 var METRICS_ARTIFACT_TYPE_NAME = "kubeflow.org/alpha/metrics"
 
+// Kubeflow type name for executions
+var EXECUTION_TYPE_NAME = "kubeflow.org/alpha/execution"
+
 var (
 	logLevel int
 	client   pb.MetadataStoreServiceClient
@@ -185,13 +188,29 @@ func (workspace Workspace) GetArtifactsByTypeWorkspace(artifactTypeRequest *pb.A
 		log.Debugf("Failed to fetch artifacts for workspace %s, Error: %v", workspace.Name, err)
 		return artifactsResponse, err
 	}
-	log.Debug(response)
 
 	artifactList := prepareFilteredArtifactsList(response.GetArtifacts(), workspace.Name)
 
 	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 
 	return artifactsResponse, nil
+}
+
+func (workspace Workspace) GetLineageByRun(artifactsByRunRequest *pb.ArtifactsByRunRequest) (*pb.ArtifactsResponse, error) {
+	var artifactsResponse *pb.ArtifactsResponse
+	var artifactList []*pb.ArtifactData
+
+    workspaceArtiracts, _ := workspace.GetArtifactsByWorkspace()
+
+    for _, artifactData := range workspaceArtiracts.GetArtifacts() {
+        if artifactData.GetRunId() == artifactsByRunRequest.GetRunId() {
+            artifactList = append(artifactList, artifactData)
+        }
+	}
+
+	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
+
+    return artifactsResponse, nil
 }
 
 func clientInit(artifactStore MLArtifactStore) pb.MetadataStoreServiceClient {
