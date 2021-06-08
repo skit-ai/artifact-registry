@@ -358,6 +358,53 @@ func (x *ArtifactsByRunRequest) GetRunId() string {
 	return ""
 }
 
+type ArtifactsByModelRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ModelId int64 `protobuf:"varint,1,opt,name=model_id,json=modelId,proto3" json:"model_id,omitempty"`
+}
+
+func (x *ArtifactsByModelRequest) Reset() {
+	*x = ArtifactsByModelRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_artifact_registry_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ArtifactsByModelRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ArtifactsByModelRequest) ProtoMessage() {}
+
+func (x *ArtifactsByModelRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_artifact_registry_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ArtifactsByModelRequest.ProtoReflect.Descriptor instead.
+func (*ArtifactsByModelRequest) Descriptor() ([]byte, []int) {
+	return file_artifact_registry_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ArtifactsByModelRequest) GetModelId() int64 {
+	if x != nil {
+		return x.ModelId
+	}
+	return 0
+}
+
 type ArtifactsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -369,7 +416,7 @@ type ArtifactsResponse struct {
 func (x *ArtifactsResponse) Reset() {
 	*x = ArtifactsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_artifact_registry_proto_msgTypes[4]
+		mi := &file_artifact_registry_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -382,7 +429,7 @@ func (x *ArtifactsResponse) String() string {
 func (*ArtifactsResponse) ProtoMessage() {}
 
 func (x *ArtifactsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_artifact_registry_proto_msgTypes[4]
+	mi := &file_artifact_registry_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -395,7 +442,7 @@ func (x *ArtifactsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ArtifactsResponse.ProtoReflect.Descriptor instead.
 func (*ArtifactsResponse) Descriptor() ([]byte, []int) {
-	return file_artifact_registry_proto_rawDescGZIP(), []int{4}
+	return file_artifact_registry_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ArtifactsResponse) GetArtifacts() []*ArtifactData {
@@ -416,7 +463,7 @@ type Workspace struct {
 func (x *Workspace) Reset() {
 	*x = Workspace{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_artifact_registry_proto_msgTypes[5]
+		mi := &file_artifact_registry_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -429,7 +476,7 @@ func (x *Workspace) String() string {
 func (*Workspace) ProtoMessage() {}
 
 func (x *Workspace) ProtoReflect() protoreflect.Message {
-	mi := &file_artifact_registry_proto_msgTypes[5]
+	mi := &file_artifact_registry_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -442,7 +489,7 @@ func (x *Workspace) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Workspace.ProtoReflect.Descriptor instead.
 func (*Workspace) Descriptor() ([]byte, []int) {
-	return file_artifact_registry_proto_rawDescGZIP(), []int{5}
+	return file_artifact_registry_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Workspace) GetName() string {
@@ -496,16 +543,20 @@ var file_artifact_registry_proto_rawDesc = []byte{
 	0x54, 0x41, 0x53, 0x45, 0x54, 0x10, 0x02, 0x22, 0x2e, 0x0a, 0x15, 0x41, 0x72, 0x74, 0x69, 0x66,
 	0x61, 0x63, 0x74, 0x73, 0x42, 0x79, 0x52, 0x75, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
 	0x12, 0x15, 0x0a, 0x06, 0x72, 0x75, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x05, 0x72, 0x75, 0x6e, 0x49, 0x64, 0x22, 0x52, 0x0a, 0x11, 0x41, 0x72, 0x74, 0x69, 0x66,
-	0x61, 0x63, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3d, 0x0a, 0x09,
-	0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x1f, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73,
-	0x74, 0x72, 0x79, 0x2e, 0x41, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x44, 0x61, 0x74, 0x61,
-	0x52, 0x09, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x73, 0x22, 0x1f, 0x0a, 0x09, 0x57,
-	0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x42, 0x15, 0x5a, 0x13,
-	0x2f, 0x3b, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73,
-	0x74, 0x72, 0x79, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x52, 0x05, 0x72, 0x75, 0x6e, 0x49, 0x64, 0x22, 0x34, 0x0a, 0x17, 0x41, 0x72, 0x74, 0x69, 0x66,
+	0x61, 0x63, 0x74, 0x73, 0x42, 0x79, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x07, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x49, 0x64, 0x22, 0x52, 0x0a,
+	0x11, 0x41, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x3d, 0x0a, 0x09, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74, 0x73, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74,
+	0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x2e, 0x41, 0x72, 0x74, 0x69, 0x66, 0x61,
+	0x63, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x09, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74,
+	0x73, 0x22, 0x1f, 0x0a, 0x09, 0x57, 0x6f, 0x72, 0x6b, 0x73, 0x70, 0x61, 0x63, 0x65, 0x12, 0x12,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61,
+	0x6d, 0x65, 0x42, 0x15, 0x5a, 0x13, 0x2f, 0x3b, 0x61, 0x72, 0x74, 0x69, 0x66, 0x61, 0x63, 0x74,
+	0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x79, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -521,7 +572,7 @@ func file_artifact_registry_proto_rawDescGZIP() []byte {
 }
 
 var file_artifact_registry_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_artifact_registry_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_artifact_registry_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_artifact_registry_proto_goTypes = []interface{}{
 	(ArtifactData_ArtifactType)(0),          // 0: artifact_registry.ArtifactData.ArtifactType
 	(ArtifactByTypeRequest_ArtifactType)(0), // 1: artifact_registry.ArtifactByTypeRequest.ArtifactType
@@ -529,13 +580,14 @@ var file_artifact_registry_proto_goTypes = []interface{}{
 	(*ArtifactData)(nil),                    // 3: artifact_registry.ArtifactData
 	(*ArtifactByTypeRequest)(nil),           // 4: artifact_registry.ArtifactByTypeRequest
 	(*ArtifactsByRunRequest)(nil),           // 5: artifact_registry.ArtifactsByRunRequest
-	(*ArtifactsResponse)(nil),               // 6: artifact_registry.ArtifactsResponse
-	(*Workspace)(nil),                       // 7: artifact_registry.Workspace
-	(*structpb.Struct)(nil),                 // 8: google.protobuf.Struct
+	(*ArtifactsByModelRequest)(nil),         // 6: artifact_registry.ArtifactsByModelRequest
+	(*ArtifactsResponse)(nil),               // 7: artifact_registry.ArtifactsResponse
+	(*Workspace)(nil),                       // 8: artifact_registry.Workspace
+	(*structpb.Struct)(nil),                 // 9: google.protobuf.Struct
 }
 var file_artifact_registry_proto_depIdxs = []int32{
 	0, // 0: artifact_registry.ArtifactData.artifact_type:type_name -> artifact_registry.ArtifactData.ArtifactType
-	8, // 1: artifact_registry.ArtifactData.metadata:type_name -> google.protobuf.Struct
+	9, // 1: artifact_registry.ArtifactData.metadata:type_name -> google.protobuf.Struct
 	1, // 2: artifact_registry.ArtifactByTypeRequest.artifact_type:type_name -> artifact_registry.ArtifactByTypeRequest.ArtifactType
 	3, // 3: artifact_registry.ArtifactsResponse.artifacts:type_name -> artifact_registry.ArtifactData
 	4, // [4:4] is the sub-list for method output_type
@@ -600,7 +652,7 @@ func file_artifact_registry_proto_init() {
 			}
 		}
 		file_artifact_registry_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ArtifactsResponse); i {
+			switch v := v.(*ArtifactsByModelRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -612,6 +664,18 @@ func file_artifact_registry_proto_init() {
 			}
 		}
 		file_artifact_registry_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ArtifactsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_artifact_registry_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Workspace); i {
 			case 0:
 				return &v.state
@@ -631,7 +695,7 @@ func file_artifact_registry_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_artifact_registry_proto_rawDesc,
 			NumEnums:      2,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

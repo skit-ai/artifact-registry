@@ -20,8 +20,8 @@ limitations under the License.
 package artifact_registry
 
 import (
-    "fmt"
 	"context"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -77,7 +77,7 @@ func ArtifactStore(host string, port string) MLArtifactStore {
 		log.SetLevel(logLevel)
 	}
 
-    artifactStore := MLArtifactStore{Host: host, Port: port}
+	artifactStore := MLArtifactStore{Host: host, Port: port}
 	client = clientInit(artifactStore)
 
 	return artifactStore
@@ -165,18 +165,18 @@ func (workspace Workspace) GetArtifactsByTypeWorkspace(artifactTypeRequest *pb.A
 	var artifactsResponse *pb.ArtifactsResponse
 	var artifactType string
 
-    switch artifactTypeRequest.ArtifactType {
-    case pb.ArtifactByTypeRequest_DATASET:
+	switch artifactTypeRequest.ArtifactType {
+	case pb.ArtifactByTypeRequest_DATASET:
 		artifactType = DATASET_ARTIFACT_TYPE_NAME
-    case pb.ArtifactByTypeRequest_MODEL:
+	case pb.ArtifactByTypeRequest_MODEL:
 		artifactType = MODEL_ARTIFACT_TYPE_NAME
-    case pb.ArtifactByTypeRequest_METRICS:
+	case pb.ArtifactByTypeRequest_METRICS:
 		artifactType = METRICS_ARTIFACT_TYPE_NAME
-    default:
-        var err error
+	default:
+		var err error
 		log.Debugf("Artifact type %s does not exist", artifactTypeRequest.ArtifactType.Enum())
 		return artifactsResponse, err
-    }
+	}
 
 	artifactsByTypeRequest := &pb.GetArtifactsByTypeRequest{TypeName: &artifactType}
 
@@ -196,27 +196,70 @@ func (workspace Workspace) GetArtifactsByTypeWorkspace(artifactTypeRequest *pb.A
 	return artifactsResponse, nil
 }
 
+// GetLineageByRun returns a list of artifacts associated with a Kubeflow run
 func (workspace Workspace) GetLineageByRun(artifactsByRunRequest *pb.ArtifactsByRunRequest) (*pb.ArtifactsResponse, error) {
 	var artifactsResponse *pb.ArtifactsResponse
 	var artifactList []*pb.ArtifactData
 
-    workspaceArtiracts, _ := workspace.GetArtifactsByWorkspace()
+	workspaceArtifacts, _ := workspace.GetArtifactsByWorkspace()
+	log.Debug(workspaceArtifacts)
 
-    for _, artifactData := range workspaceArtiracts.GetArtifacts() {
-        if artifactData.GetRunId() == artifactsByRunRequest.GetRunId() {
-            artifactList = append(artifactList, artifactData)
-        }
+	for _, artifactData := range workspaceArtifacts.GetArtifacts() {
+		log.Debug(artifactData.GetId())
+		if artifactData.GetRunId() == artifactsByRunRequest.GetRunId() {
+			artifactList = append(artifactList, artifactData)
+		}
 	}
 
 	artifactsResponse = &pb.ArtifactsResponse{Artifacts: artifactList}
 
-    return artifactsResponse, nil
+	return artifactsResponse, nil
+}
+
+// GetLinageByModel returns a list of artifacts associated with a Model
+func (workspace Workspace) GetLineageByModel(artifactsByModelRequest *pb.ArtifactsByModelRequest) (*pb.ArtifactsResponse, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5000*time.Millisecond)
+	defer cancel()
+
+	// All executions associated with this model
+	eventsByArtifactIdRequest := &pb.GetEventsByArtifactIDsRequest{
+		ArtifactIds: []int64{artifactsByModelRequest.GetModelId()},
+	}
+
+	response, _ := client.GetEventsByArtifactIDs(ctx, eventsByArtifactIdRequest)
+
+	var executionIds []int64
+	for _, event := range response.GetEvents() {
+		executionIds = append(executionIds, event.GetExecutionId())
+	}
+
+	// All events associated with all the executions of this model
+	eventsByExecutionIdsRequest := &pb.GetEventsByExecutionIDsRequest{
+		ExecutionIds: uniqueList(executionIds),
+	}
+
+	responseEvents, _ := client.GetEventsByExecutionIDs(ctx, eventsByExecutionIdsRequest)
+
+	// All the artifacts of the events
+	var artifactIds []int64
+	for _, event := range responseEvents.GetEvents() {
+		artifactIds = append(artifactIds, event.GetArtifactId())
+	}
+
+	artifactsByIdsRequest := &pb.MLArtifact{
+		Ids: uniqueList(artifactIds),
+	}
+
+	artifactStore := MLArtifactStore{}
+	artifactsResponse, _ := artifactStore.GetArtifactsByID(artifactsByIdsRequest)
+
+	return artifactsResponse, nil
 }
 
 func clientInit(artifactStore MLArtifactStore) pb.MetadataStoreServiceClient {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithInsecure())
-    address := fmt.Sprintf("%s:%s", artifactStore.Host, artifactStore.Port)
+	address := fmt.Sprintf("%s:%s", artifactStore.Host, artifactStore.Port)
 	conn, err := grpc.Dial(address, opts...)
 	if err != nil {
 		log.Debugf("Failed to establish client connection: %v", err)

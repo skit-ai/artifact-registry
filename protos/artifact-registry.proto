@@ -39,6 +39,10 @@ message ArtifactsByRunRequest {
     string run_id = 1;
 }
 
+message ArtifactsByModelRequest {
+    int64 model_id = 1;
+}
+
 message ArtifactsResponse {
     repeated ArtifactData artifacts = 1;
 }

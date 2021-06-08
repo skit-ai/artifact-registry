@@ -22,7 +22,6 @@ import (
 	pb "github.com/Vernacular-ai/artifact-registry/protos"
 )
 
-
 // TODO: Add feature to push custom filter to this
 func prepareFilteredArtifactsList(artifacts []*pb.Artifact, workspaceName string) []*pb.ArtifactData {
 	var artifactList []*pb.ArtifactData
@@ -31,7 +30,7 @@ func prepareFilteredArtifactsList(artifacts []*pb.Artifact, workspaceName string
 			continue
 		}
 		artifactData := &pb.ArtifactData{
-			Id:           *item.Id,
+			Id:           item.GetId(),
 			Name:         item.Properties["name"].GetStringValue(),
 			Uri:          item.GetUri(),
 			Version:      item.Properties["version"].GetStringValue(),
@@ -66,6 +65,7 @@ func prepareArtifactsList(artifacts []*pb.Artifact) []*pb.ArtifactData {
 	var artifactList []*pb.ArtifactData
 	for _, item := range artifacts {
 		artifactData := &pb.ArtifactData{
+			Id:           item.GetId(),
 			Name:         item.Properties["name"].GetStringValue(),
 			Uri:          item.GetUri(),
 			Version:      item.Properties["version"].GetStringValue(),
@@ -75,4 +75,17 @@ func prepareArtifactsList(artifacts []*pb.Artifact) []*pb.ArtifactData {
 		artifactList = append(artifactList, artifactData)
 	}
 	return artifactList
+}
+
+func uniqueList(intSlice []int64) []int64 {
+	keys := make(map[int64]bool)
+	list := []int64{}
+
+	for _, entry := range intSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
 }

@@ -2,9 +2,9 @@
 package artifact_registry_test
 
 import (
+	"fmt"
 	pb "github.com/Vernacular-ai/artifact-registry/protos"
 	registry "github.com/Vernacular-ai/artifact-registry/registry"
-	"fmt"
 )
 
 // Usage guide to get artifacts by IDs
@@ -75,9 +75,9 @@ func ExampleWorkspace_GetArtifactsByTypeWorkspace() {
 
 	workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
 
-    artifactTypeRequest := &pb.ArtifactByTypeRequest{
+	artifactTypeRequest := &pb.ArtifactByTypeRequest{
 		ArtifactType: pb.ArtifactByTypeRequest_MODEL,
-    }
+	}
 	artifactList, _ := workspace.GetArtifactsByTypeWorkspace(artifactTypeRequest)
 
 	for _, artifactData := range artifactList.GetArtifacts() {
@@ -87,12 +87,12 @@ func ExampleWorkspace_GetArtifactsByTypeWorkspace() {
 	// MNIST
 	// MNIST
 	// MNIST
-    // FunctionComponent
+	// FunctionComponent
 }
 
 // Example to get lineage by run
 func ExampleWorkspace_GetLineageByRun() {
-    artifactStore := registry.ArtifactStore("localhost", "8080")
+	artifactStore := registry.ArtifactStore("localhost", "8080")
 
 	workspaceInfo := &pb.Workspace{
 		Name: "workspace_1",
@@ -100,15 +100,40 @@ func ExampleWorkspace_GetLineageByRun() {
 
 	workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
 
-    artifactsByRunRequest := &pb.ArtifactsByRunRequest{
-        RunId: "1c3ef58a-0b72-4fe8-8a92-9bf1e77ef7c3",
-    }
+	artifactsByRunRequest := &pb.ArtifactsByRunRequest{
+		RunId: "1c3ef58a-0b72-4fe8-8a92-9bf1e77ef7c3",
+	}
 
-    artifactList, _ := workspace.GetLineageByRun(artifactsByRunRequest)
+	artifactList, _ := workspace.GetLineageByRun(artifactsByRunRequest)
 
-    for _, artifactData := range artifactList.GetArtifacts() {
+	for _, artifactData := range artifactList.GetArtifacts() {
 		fmt.Println(artifactData.GetName())
 	}
-    // Output:
-    // FunctionComponent
+	// Output:
+	// FunctionComponent
+}
+
+// Example to get lineage by model
+func ExampleWorkspace_GetLineageByModel() {
+	artifactStore := registry.ArtifactStore("localhost", "8080")
+
+	workspaceInfo := &pb.Workspace{
+		Name: "workspace_1",
+	}
+
+	workspace, _ := artifactStore.GetWorkspace(workspaceInfo)
+
+	artifactsByModelRequest := &pb.ArtifactsByModelRequest{
+		ModelId: 6443,
+	}
+
+	artifactList, _ := workspace.GetLineageByModel(artifactsByModelRequest)
+
+	for _, artifactData := range artifactList.GetArtifacts() {
+		fmt.Println(artifactData.GetId())
+	}
+	// Output:
+	// 6442
+	// 6443
+	// 6445
 }
