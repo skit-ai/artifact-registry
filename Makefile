@@ -23,3 +23,6 @@ compile: build
 
 doc:
 	godoc -http=:6060
+
+test:
+	go test registry/registry_test.go -v
